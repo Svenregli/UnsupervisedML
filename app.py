@@ -655,7 +655,7 @@ def show_dimensionality_analysis_fixed(dashboard):
 
 def show_outlier_analysis_fixed(dashboard):
     """
-    Fixed outlier analysis that handles missing data gracefully.
+    Fixed outlier analysis that handles missing data gracefully with additional plots.
     """
     analyzer = dashboard.analyzer
     df = analyzer.df
@@ -719,6 +719,152 @@ def show_outlier_analysis_fixed(dashboard):
             if 'outlier_consensus_score' in df.columns:
                 strong_outliers = (df['outlier_consensus_score'] >= 3).sum()
                 st.metric("Strong Outliers", f"{strong_outliers:,}")
+    
+    # NEW PLOT 1: Outlier Distribution in UMAP Space
+    st.subheader("🗺️ Outlier Distribution in 2D Space")
+    
+    if hasattr(analyzer, 'dimensionality_results') and 'umap' in analyzer.dimensionality_results:
+        umap_data = analyzer.dimensionality_results['umap']['transformed_data']
+        
+        # Select outlier method to visualize
+        selected_method = st.selectbox(
+            "Select outlier detection method for visualization:",
+            outlier_methods,
+            key="outlier_method_selector"
+        )
+        
+        if selected_method in analyzer.outlier_labels:
+            outlier_labels = analyzer.outlier_labels[selected_method]
+            
+            # Create outlier vs normal classification
+            is_outlier = (outlier_labels == -1)
+            
+            # Create the scatter plot
+            plot_data = pd.DataFrame({
+                'UMAP_1': umap_data[:, 0],
+                'UMAP_2': umap_data[:, 1],
+                'Is_Outlier': is_outlier,
+                'Title': df['title'].str[:50] + '...' if 'title' in df.columns else df.index,
+                'Citations': df['cited_by_count'] if 'cited_by_count' in df.columns else 'N/A',
+                'Year': df['publication_year'] if 'publication_year' in df.columns else 'N/A'
+            })
+            
+            fig = px.scatter(
+                plot_data,
+                x='UMAP_1',
+                y='UMAP_2',
+                color='Is_Outlier',
+                color_discrete_map={True: 'red', False: 'blue'},
+                hover_data=['Title', 'Citations', 'Year'],
+                title=f"Outlier Distribution in UMAP Space ({selected_method.upper()})",
+                labels={'UMAP_1': 'UMAP Dimension 1', 'UMAP_2': 'UMAP Dimension 2', 'Is_Outlier': 'Outlier Status'}
+            )
+            
+            # Update marker sizes
+            fig.update_traces(
+                marker=dict(
+                    size=[8 if outlier else 4 for outlier in is_outlier],
+                    opacity=[0.9 if outlier else 0.6 for outlier in is_outlier]
+                )
+            )
+            
+            # Update legend
+            fig.for_each_trace(lambda t: t.update(name="Outlier" if t.name == "True" else "Normal"))
+            
+            st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.info("UMAP visualization not available for outlier distribution.")
+    
+    # NEW PLOT 2: Citation vs Age Scatter with Outlier Highlighting
+    st.subheader("📈 Citation Patterns: Outliers vs Normal Papers")
+    
+    if 'cited_by_count' in df.columns and 'paper_age' in df.columns and outlier_methods:
+        
+        # Method selection for this plot
+        selected_method_2 = st.selectbox(
+            "Select outlier method for citation analysis:",
+            outlier_methods,
+            key="outlier_citation_method"
+        )
+        
+        if selected_method_2 in analyzer.outlier_labels:
+            outlier_labels_2 = analyzer.outlier_labels[selected_method_2]
+            is_outlier_2 = (outlier_labels_2 == -1)
+            
+            # Create the citation vs age plot
+            citation_data = pd.DataFrame({
+                'Paper_Age': df['paper_age'],
+                'Citations': df['cited_by_count'],
+                'Is_Outlier': is_outlier_2,
+                'Title': df['title'].str[:50] + '...' if 'title' in df.columns else df.index,
+                'Year': df['publication_year'] if 'publication_year' in df.columns else 'N/A'
+            })
+            
+            # Add citations per year if available
+            if 'citations_per_year' in df.columns:
+                citation_data['Citations_Per_Year'] = df['citations_per_year']
+            
+            fig = px.scatter(
+                citation_data,
+                x='Paper_Age',
+                y='Citations',
+                color='Is_Outlier',
+                color_discrete_map={True: 'red', False: 'lightblue'},
+                hover_data=['Title', 'Year'] + (['Citations_Per_Year'] if 'citations_per_year' in df.columns else []),
+                title=f"Citations vs Paper Age - Outlier Detection ({selected_method_2.upper()})",
+                labels={'Paper_Age': 'Paper Age (years)', 'Citations': 'Citation Count', 'Is_Outlier': 'Outlier Status'}
+            )
+            
+            # Update marker properties
+            fig.update_traces(
+                marker=dict(
+                    size=[10 if outlier else 5 for outlier in is_outlier_2],
+                    opacity=[0.9 if outlier else 0.6 for outlier in is_outlier_2]
+                )
+            )
+            
+            # Update legend
+            fig.for_each_trace(lambda t: t.update(name="Outlier" if t.name == "True" else "Normal"))
+            
+            # Add log scale option
+            log_scale = st.checkbox("Use logarithmic scale for citations", key="citation_log_scale")
+            if log_scale:
+                fig.update_yaxis(type="log")
+            
+            fig.update_layout(height=500)
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Show insights
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**📊 Outlier Characteristics:**")
+                outlier_papers = df[is_outlier_2]
+                normal_papers = df[~is_outlier_2]
+                
+                if len(outlier_papers) > 0:
+                    avg_citations_outlier = outlier_papers['cited_by_count'].mean()
+                    avg_age_outlier = outlier_papers['paper_age'].mean()
+                    st.markdown(f"- Average citations: **{avg_citations_outlier:.1f}**")
+                    st.markdown(f"- Average age: **{avg_age_outlier:.1f} years**")
+                    
+                    if 'citations_per_year' in df.columns:
+                        avg_cit_per_year_outlier = outlier_papers['citations_per_year'].mean()
+                        st.markdown(f"- Citations per year: **{avg_cit_per_year_outlier:.2f}**")
+            
+            with col2:
+                st.markdown("**📊 Normal Paper Characteristics:**")
+                if len(normal_papers) > 0:
+                    avg_citations_normal = normal_papers['cited_by_count'].mean()
+                    avg_age_normal = normal_papers['paper_age'].mean()
+                    st.markdown(f"- Average citations: **{avg_citations_normal:.1f}**")
+                    st.markdown(f"- Average age: **{avg_age_normal:.1f} years**")
+                    
+                    if 'citations_per_year' in df.columns:
+                        avg_cit_per_year_normal = normal_papers['citations_per_year'].mean()
+                        st.markdown(f"- Citations per year: **{avg_cit_per_year_normal:.2f}**")
+    else:
+        st.info("Citation vs age analysis requires citation and age data.")
 
 def show_saved_experiments_sidebar():
     """Fixed experiment selection with proper analyzer loading."""
@@ -1024,11 +1170,22 @@ def show_advanced_analytics(dashboard):
             # Create heatmap data
             heatmap_data = tfidf_matrix[sample_doc_indices][:, top_term_indices].toarray()
             
-            # Create figure
+            # Create figure with document titles
+            doc_titles = []
+            for i in sample_doc_indices:
+                if 'title' in df.columns:
+                    title = str(df.iloc[i]['title'])
+                    # Truncate long titles for better display
+                    if len(title) > 40:
+                        title = title[:37] + "..."
+                    doc_titles.append(title)
+                else:
+                    doc_titles.append(f"Doc {i}")
+            
             fig = go.Figure(data=go.Heatmap(
                 z=heatmap_data,
                 x=[feature_names[i] for i in top_term_indices],
-                y=[f"Doc {i}" for i in sample_doc_indices],
+                y=doc_titles,
                 colorscale='Viridis',
                 hovertemplate='Term: %{x}<br>Document: %{y}<br>TF-IDF: %{z:.3f}<extra></extra>'
             ))
@@ -1036,7 +1193,7 @@ def show_advanced_analytics(dashboard):
             fig.update_layout(
                 title=f"TF-IDF Heatmap: Top {n_terms} Terms vs {len(sample_doc_indices)} Sample Documents",
                 xaxis_title="Terms",
-                yaxis_title="Documents",
+                yaxis_title="Document Titles",
                 height=600
             )
             
@@ -1104,113 +1261,126 @@ def show_advanced_analytics(dashboard):
             from sklearn.metrics.pairwise import cosine_similarity
             similarity_matrix = cosine_similarity(sample_matrix)
             
+            # Create document titles for similarity matrix
+            doc_titles = []
+            for i in sample_indices:
+                if 'title' in df.columns:
+                    title = str(df.iloc[i]['title'])
+                    # Truncate long titles for better display
+                    if len(title) > 30:
+                        title = title[:27] + "..."
+                    doc_titles.append(title)
+                else:
+                    doc_titles.append(f"Doc {i}")
+            
             # Create heatmap
             fig = go.Figure(data=go.Heatmap(
                 z=similarity_matrix,
-                x=[f"Doc {i}" for i in sample_indices],
-                y=[f"Doc {i}" for i in sample_indices],
+                x=doc_titles,
+                y=doc_titles,
                 colorscale='RdBu',
                 zmid=0,
-                hovertemplate='Doc %{x} vs Doc %{y}<br>Similarity: %{z:.3f}<extra></extra>'
+                hovertemplate='%{y} vs %{x}<br>Similarity: %{z:.3f}<extra></extra>'
             ))
             
             fig.update_layout(
                 title=f"Document Similarity Matrix (Cosine Similarity)",
-                xaxis_title="Documents",
-                yaxis_title="Documents",
-                height=600
+                xaxis_title="Document Titles",
+                yaxis_title="Document Titles",
+                height=600,
+                xaxis={'tickangle': 45},  # Rotate x-axis labels for better readability
+                yaxis={'tickangle': 0}
             )
             
             st.plotly_chart(fig, use_container_width=True)
             
-            # Show most similar document pairs
+            # Show most similar document pairs with actual titles
             st.subheader("Most Similar Document Pairs")
             
             # Get upper triangle of similarity matrix (excluding diagonal)
-            mask = np.triu(np.ones_like(similarity_matrix, dtype=bool), k=1)
             similarities = []
             
             for i in range(len(sample_indices)):
                 for j in range(i+1, len(sample_indices)):
+                    doc1_title = df.iloc[sample_indices[i]]['title'] if 'title' in df.columns else f"Document {sample_indices[i]}"
+                    doc2_title = df.iloc[sample_indices[j]]['title'] if 'title' in df.columns else f"Document {sample_indices[j]}"
+                    
                     similarities.append({
-                        'Doc 1': sample_indices[i],
-                        'Doc 2': sample_indices[j],
+                        'Doc 1 Index': sample_indices[i],
+                        'Doc 2 Index': sample_indices[j],
                         'Similarity': similarity_matrix[i, j],
-                        'Title 1': df.iloc[sample_indices[i]]['title'][:50] + "...",
-                        'Title 2': df.iloc[sample_indices[j]]['title'][:50] + "..."
+                        'Document 1 Title': doc1_title[:80] + "..." if len(str(doc1_title)) > 80 else str(doc1_title),
+                        'Document 2 Title': doc2_title[:80] + "..." if len(str(doc2_title)) > 80 else str(doc2_title)
                     })
             
             similarities_df = pd.DataFrame(similarities).sort_values('Similarity', ascending=False)
-            st.dataframe(similarities_df.head(10), use_container_width=True)
+            
+            # Display with better column names
+            display_similarities = similarities_df[['Document 1 Title', 'Document 2 Title', 'Similarity']].head(10)
+            st.dataframe(display_similarities, use_container_width=True)
     
     else:
         st.warning("TF-IDF analysis not available. Please ensure text features are computed during analysis.")
     
-    # Existing temporal analysis code continues here...
+    # Temporal analysis
     st.subheader("⏰ Temporal Research Evolution")
     
-    with col2:
-        st.markdown("**Dataset Characteristics:**")
+    if 'cluster_kmeans' in df.columns and 'publication_year' in df.columns:
+        # Cluster evolution over time
+        temporal_data = []
+        years = sorted(df['publication_year'].unique())
+        clusters = sorted(df['cluster_kmeans'].unique())
         
-        characteristics = []
-        if 'cited_by_count' in df.columns:
-            max_citations = df['cited_by_count'].max()
-            characteristics.append(f"📈 Max Citations: {max_citations:,}")
-        
-        if 'publication_year' in df.columns:
-            year_span = df['publication_year'].max() - df['publication_year'].min()
-            characteristics.append(f"📅 Year Span: {year_span:.0f} years")
-        
-        if hasattr(analyzer, 'numerical_features'):
-            characteristics.append(f"🔢 Features: {len(analyzer.numerical_features)}")
-        
-        for characteristic in characteristics:
-            st.markdown(f"- {characteristic}")
-    
-    # Interactive exploration
-    st.subheader("🎯 Interactive Exploration")
-    
-    if hasattr(analyzer, 'cluster_labels') and analyzer.cluster_labels:
-        # Cluster comparison
-        st.markdown("**Compare Clustering Methods:**")
-        
-        methods = list(analyzer.cluster_labels.keys())
-        if len(methods) > 1:
-            # Create comparison chart
-            comparison_data = []
-            for method in methods:
-                labels = analyzer.cluster_labels[method]
-                n_clusters = len(np.unique(labels[labels != -1]))  # Exclude noise
-                n_noise = np.sum(labels == -1)
+        for year in years:
+            year_papers = df[df['publication_year'] == year]
+            total_year_papers = len(year_papers)
+            
+            for cluster in clusters:
+                cluster_count = len(year_papers[year_papers['cluster_kmeans'] == cluster])
                 
-                comparison_data.append({
-                    'Method': method.upper(),
-                    'Clusters': n_clusters,
-                    'Noise Points': n_noise,
-                    'Largest Cluster': pd.Series(labels).value_counts().max()
+                temporal_data.append({
+                    'Year': year,
+                    'Cluster': f'Cluster {cluster}',
+                    'Count': cluster_count
                 })
-            
-            comparison_df = pd.DataFrame(comparison_data)
-            st.dataframe(comparison_df, use_container_width=True)
         
-        # Feature importance (if available)
-        if hasattr(analyzer, 'numerical_features') and analyzer.numerical_features:
-            st.markdown("**Feature Statistics:**")
-            
-            feature_stats = []
-            for feature in analyzer.numerical_features:
-                if feature in df.columns:
-                    feature_stats.append({
-                        'Feature': feature,
-                        'Mean': df[feature].mean(),
-                        'Std': df[feature].std(),
-                        'Min': df[feature].min(),
-                        'Max': df[feature].max()
-                    })
-            
-            if feature_stats:
-                stats_df = pd.DataFrame(feature_stats)
-                st.dataframe(stats_df, use_container_width=True)
+        temporal_df = pd.DataFrame(temporal_data)
+        
+        # Plot temporal evolution (absolute counts only)
+        fig = px.line(
+            temporal_df, 
+            x='Year', 
+            y='Count', 
+            color='Cluster',
+            title="Research Community Evolution (Absolute Counts)",
+            markers=True
+        )
+        
+        fig.update_layout(height=500)
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.info("Temporal analysis requires clustering results and publication year data.")
+    
+    # Feature Statistics
+    st.subheader("📊 Feature Statistics")
+    
+    if hasattr(analyzer, 'numerical_features') and analyzer.numerical_features:
+        feature_stats = []
+        for feature in analyzer.numerical_features:
+            if feature in df.columns:
+                feature_stats.append({
+                    'Feature': feature,
+                    'Mean': df[feature].mean(),
+                    'Std': df[feature].std(),
+                    'Min': df[feature].min(),
+                    'Max': df[feature].max()
+                })
+        
+        if feature_stats:
+            stats_df = pd.DataFrame(feature_stats)
+            st.dataframe(stats_df, use_container_width=True)
+    else:
+        st.info("Feature statistics not available.")
 
 def show_research_explorer_fixed(dashboard):
     """
