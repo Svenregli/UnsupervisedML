@@ -1,0 +1,417 @@
+[
+  {
+    "openalex_id": "https://openalex.org/W2919115771",
+    "title": "Deep learning",
+    "abstract": "",
+    "publication_year": 2015,
+    "cited_by_count": 68803,
+    "authors": [
+      {
+        "name": "Yann LeCun",
+        "id": "https://openalex.org/A5001226970",
+        "institution": "Meta (United States)"
+      },
+      {
+        "name": "Yoshua Bengio",
+        "id": "https://openalex.org/A5086198262",
+        "institution": "Université de Montréal"
+      },
+      {
+        "name": "Geoffrey E. Hinton",
+        "id": "https://openalex.org/A5108093963",
+        "institution": "University of New Brunswick"
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.1038/nature14539",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  },
+  {
+    "openalex_id": "https://openalex.org/W2024060531",
+    "title": "Optimization by Simulated Annealing",
+    "abstract": "There is a deep and useful connection between statistical mechanics (the behavior of systems with many degrees of freedom in thermal equilibrium at a finite temperature) and multivariate or combinatorial optimization (finding the minimum of a given function depending on many parameters). A detailed analogy with annealing in solids provides a framework for optimization of the properties of very large and complex systems. This connection to statistical mechanics exposes new information and provides an unfamiliar perspective on traditional optimization problems and methods.",
+    "publication_year": 1983,
+    "cited_by_count": 43347,
+    "authors": [
+      {
+        "name": "Scott Kirkpatrick",
+        "id": "https://openalex.org/A5013336788",
+        "institution": "IBM Research - Thomas J. Watson Research Center"
+      },
+      {
+        "name": "C. D. Gelatt",
+        "id": "https://openalex.org/A5043473326",
+        "institution": "IBM Research - Thomas J. Watson Research Center"
+      },
+      {
+        "name": "M.P. Vecchi",
+        "id": "https://openalex.org/A5082059084",
+        "institution": "Instituto Venezolano de Investigaciones Científicas"
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.1126/science.220.4598.671",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  },
+  {
+    "openalex_id": "https://openalex.org/W2152195021",
+    "title": "Particle swarm optimization",
+    "abstract": "A concept for the optimization of nonlinear functions using particle swarm methodology is introduced. The evolution of several paradigms is outlined, and an implementation of one of the paradigms is discussed. Benchmark testing of the paradigm is described, and applications, including nonlinear function optimization and neural network training, are proposed. The relationships between particle swarm optimization and both artificial life and genetic algorithms are described.",
+    "publication_year": 2002,
+    "cited_by_count": 41897,
+    "authors": [
+      {
+        "name": "James Kennedy",
+        "id": "https://openalex.org/A5102905570",
+        "institution": ""
+      },
+      {
+        "name": "R.C. Eberhart",
+        "id": "https://openalex.org/A5109974163",
+        "institution": "Indiana University – Purdue University Indianapolis"
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.1109/icnn.1995.488968",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  },
+  {
+    "openalex_id": "https://openalex.org/W2121863487",
+    "title": "Reinforcement Learning: An Introduction",
+    "abstract": "Reinforcement learning, one of the most active research areas in artificial intelligence, is a computational approach to learning whereby an agent tries to maximize the total amount of reward it receives when interacting with a complex, uncertain environment. In Reinforcement Learning, Richard Sutton and Andrew Barto provide a clear and simple account of the key ideas and algorithms of reinforcement learning. Their discussion ranges from the history of the field's intellectual foundations to the most recent developments and applications. The only necessary mathematical background is familiarity with elementary concepts of probability. The book is divided into three parts. Part I defines the reinforcement learning problem in terms of Markov decision processes. Part II provides basic solution methods: dynamic programming, Monte Carlo methods, and temporal-difference learning. Part III presents a unified view of the solution methods and incorporates artificial neural networks, eligibility traces, and planning; the two final chapters present case studies and consider the future of reinforcement learning.",
+    "publication_year": 2005,
+    "cited_by_count": 26875,
+    "authors": [
+      {
+        "name": "Richard S. Sutton",
+        "id": "https://openalex.org/A5004923102",
+        "institution": ""
+      },
+      {
+        "name": "Andy Barto",
+        "id": "https://openalex.org/A5113708591",
+        "institution": ""
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.1109/tnn.2004.842673",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  },
+  {
+    "openalex_id": "https://openalex.org/W2145339207",
+    "title": "Human-level control through deep reinforcement learning",
+    "abstract": "",
+    "publication_year": 2015,
+    "cited_by_count": 25865,
+    "authors": [
+      {
+        "name": "Volodymyr Mnih",
+        "id": "https://openalex.org/A5008904142",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Koray Kavukcuoglu",
+        "id": "https://openalex.org/A5090341705",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "David Silver",
+        "id": "https://openalex.org/A5091771290",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Andrei A. Rusu",
+        "id": "https://openalex.org/A5101742327",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Joel Veness",
+        "id": "https://openalex.org/A5060709021",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Marc G. Bellemare",
+        "id": "https://openalex.org/A5001087292",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Alex Graves",
+        "id": "https://openalex.org/A5043473089",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Martin Riedmiller",
+        "id": "https://openalex.org/A5041323275",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Andreas Fidjeland",
+        "id": "https://openalex.org/A5032865587",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Georg Ostrovski",
+        "id": "https://openalex.org/A5016618355",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Stig Petersen",
+        "id": "https://openalex.org/A5050109164",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Charles Beattie",
+        "id": "https://openalex.org/A5018388854",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Amir Sadik",
+        "id": "https://openalex.org/A5012250683",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Ioannis Antonoglou",
+        "id": "https://openalex.org/A5021217383",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Helen King",
+        "id": "https://openalex.org/A5048371195",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Dharshan Kumaran",
+        "id": "https://openalex.org/A5048551460",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Daan Wierstra",
+        "id": "https://openalex.org/A5053990531",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Shane Legg",
+        "id": "https://openalex.org/A5008987732",
+        "institution": "Google (United States)"
+      },
+      {
+        "name": "Demis Hassabis",
+        "id": "https://openalex.org/A5005349213",
+        "institution": "Google (United States)"
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.1038/nature14236",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  },
+  {
+    "openalex_id": "https://openalex.org/W2122410182",
+    "title": "Artificial intelligence: a modern approach",
+    "abstract": "The long-anticipated revision of this #1 selling book offers the most comprehensive, state of the art introduction to the theory and practice of artificial intelligence for modern applications. Intelligent Agents. Solving Problems by Searching. Informed Search Methods. Game Playing. Agents that Reason Logically. First-order Logic. Building a Knowledge Base. Inference in First-Order Logic. Logical Reasoning Systems. Practical Planning. Planning and Acting. Uncertainty. Probabilistic Reasoning Systems. Making Simple Decisions. Making Complex Decisions. Learning from Observations. Learning with Neural Networks. Reinforcement Learning. Knowledge in Learning. Agents that Communicate. Practical Communication in English. Perception. Robotics. For computer professionals, linguists, and cognitive scientists interested in artificial intelligence.",
+    "publication_year": 1995,
+    "cited_by_count": 22431,
+    "authors": [
+      {
+        "name": "Stuart Russell",
+        "id": "https://openalex.org/A5007305440",
+        "institution": "University of California, Berkeley"
+      },
+      {
+        "name": "Peter Norvig",
+        "id": "https://openalex.org/A5080389385",
+        "institution": "University of Southern California"
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.5860/choice.33-1577",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  },
+  {
+    "openalex_id": "https://openalex.org/W2140606211",
+    "title": "The Positive and Negative Syndrome Scale (PANSS) for Schizophrenia",
+    "abstract": "The variable results of positive-negative research with schizophrenics underscore the importance of well-characterized, standardized measurement techniques. We report on the development and initial standardization of the Positive and Negative Syndrome Scale (PANSS) for typological and dimensional assessment. Based on two established psychiatric rating systems, the 30-item PANSS was conceived as an operationalized, drug-sensitive instrument that provides balanced representation of positive and negative symptoms and gauges their relationship to one another and to global psychopathology. It thus constitutes four scales measuring positive and negative syndromes, their differential, and general severity of illness. Study of 101 schizophrenics found the four scales to be normally distributed and supported their reliability and stability. Positive and negative scores were inversely correlated once their common association with general psychopathology was extracted, suggesting that they represent mutually exclusive constructs. Review of five studies involving the PANSS provided evidence of its criterion-related validity with antecedent, genealogical, and concurrent measures, its predictive validity, its drug sensitivity, and its utility for both typological and dimensional assessment.",
+    "publication_year": 1987,
+    "cited_by_count": 20236,
+    "authors": [
+      {
+        "name": "Stanley R. Kay",
+        "id": "https://openalex.org/A5112198450",
+        "institution": "Bronx Psychiatric Center"
+      },
+      {
+        "name": "Abraham Fiszbein",
+        "id": "https://openalex.org/A5025529228",
+        "institution": "Montefiore Medical Center"
+      },
+      {
+        "name": "Lewis A. Opler",
+        "id": "https://openalex.org/A5114803298",
+        "institution": "Montefiore Medical Center"
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.1093/schbul/13.2.261",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  },
+  {
+    "openalex_id": "https://openalex.org/W2962793481",
+    "title": "Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks",
+    "abstract": "Image-to-image translation is a class of vision and graphics problems where the goal is to learn the mapping between an input image and an output image using a training set of aligned image pairs. However, for many tasks, paired training data will not be available. We present an approach for learning to translate an image from a source domain X to a target domain Y in the absence of paired examples. Our goal is to learn a mapping G : X → Y such that the distribution of images from G(X) is indistinguishable from the distribution Y using an adversarial loss. Because this mapping is highly under-constrained, we couple it with an inverse mapping F : Y → X and introduce a cycle consistency loss to push F(G(X)) ≈ X (and vice versa). Qualitative results are presented on several tasks where paired training data does not exist, including collection style transfer, object transfiguration, season transfer, photo enhancement, etc. Quantitative comparisons against several prior methods demonstrate the superiority of our approach.",
+    "publication_year": 2017,
+    "cited_by_count": 19382,
+    "authors": [
+      {
+        "name": "Jun-Yan Zhu",
+        "id": "https://openalex.org/A5102883508",
+        "institution": "Berkeley College"
+      },
+      {
+        "name": "Taesung Park",
+        "id": "https://openalex.org/A5100643662",
+        "institution": "Berkeley College"
+      },
+      {
+        "name": "Phillip Isola",
+        "id": "https://openalex.org/A5017456911",
+        "institution": "Berkeley College"
+      },
+      {
+        "name": "Alexei A. Efros",
+        "id": "https://openalex.org/A5077436220",
+        "institution": "Berkeley College"
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.1109/iccv.2017.244",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  },
+  {
+    "openalex_id": "https://openalex.org/W2133990480",
+    "title": "The WEKA data mining software",
+    "abstract": "More than twelve years have elapsed since the first public release of WEKA. In that time, the software has been rewritten entirely from scratch, evolved substantially and now accompanies a text on data mining [35]. These days, WEKA enjoys widespread acceptance in both academia and business, has an active community, and has been downloaded more than 1.4 million times since being placed on Source-Forge in April 2000. This paper provides an introduction to the WEKA workbench, reviews the history of the project, and, in light of the recent 3.6 stable release, briefly discusses what has been added since the last stable version (Weka 3.4) released in 2003.",
+    "publication_year": 2009,
+    "cited_by_count": 17877,
+    "authors": [
+      {
+        "name": "Mark Hall",
+        "id": "https://openalex.org/A5056507889",
+        "institution": ""
+      },
+      {
+        "name": "Eibe Frank",
+        "id": "https://openalex.org/A5059992863",
+        "institution": "University of Waikato"
+      },
+      {
+        "name": "Geoffrey Holmes",
+        "id": "https://openalex.org/A5063502807",
+        "institution": "University of Waikato"
+      },
+      {
+        "name": "Bernhard Pfahringer",
+        "id": "https://openalex.org/A5087785022",
+        "institution": "University of Waikato"
+      },
+      {
+        "name": "Peter Reutemann",
+        "id": "https://openalex.org/A5065535374",
+        "institution": "University of Waikato"
+      },
+      {
+        "name": "Ian H. Witten",
+        "id": "https://openalex.org/A5045934263",
+        "institution": "University of Waikato"
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.1145/1656274.1656278",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  },
+  {
+    "openalex_id": "https://openalex.org/W2004778468",
+    "title": "The genetical theory of natural selection",
+    "abstract": "We need scarcely add that the contemplation in natural science of a wider domain than the actual leads to a far better understanding of the actual.' (p. 267,The, Nature of the Physical World.)x PREFACE evolutionary theory was thus chiefly retrogressive, the mighty body of Mendelian researches throughout the world has evidently out- grown the fallacies with which it was at first fostered.As a pioneer of genetics he has done more than enough to expiate the rash polemics of his early writings.To treat Natural Selection as an agency based independently on its own foundations is not to mimimize its importance in the theory of evolution.On the contrary, as soon as we require to form opinions by other means than by comparison and analogy, such an indepen- dent deductive basis becomes a necessity.This necessity is particu- larly to be noted for mankind ; since we have some knowledge of the structure of society, of human motives, and of the vital statistics of this species, the use of the deductive method can supply a more intimate knowledge of the evolutionary processes than is elsewhere possible.In addition it will be of importance for our subject to call ) attention to several consequences of the principle of Natural Selection!which, since they do not consist in the adaptive modification of specific I forms, have necessarily escaped attention.The genetic phenomena of I dominance and linkage seem to offer examples of this class, the future ' investigation of which may add greatly to the scope of our subject.No efforts of mine could avail to make the book easy reading.I have endeavoured to assist the reader by giving short summaries at the ends of all chapters, except Chapter IV, which is summarized conjointly with Chapter V.Those who prefer to do so may regardChapter IV as a mathematical appendix to the corresponding part of the summary.The deductions respecting Man are strictly in- separable from the more general chapters, but have been placed together in a group commencing with Chapter VIII.I believe no one will be surprised that a large number of the points considered demand a far fuller, more rigorous, and more comprehensive treat- ment.It seems impossible that full justice should be done to the subject in this way, until there is built up a tradition of mathematical work devoted to biological problems, comparable to the researches upon which a mathematical physicist can draw in the resolution of special difficulties.",
+    "publication_year": 1930,
+    "cited_by_count": 17563,
+    "authors": [
+      {
+        "name": "Ronald Aylmer Fisher",
+        "id": "https://openalex.org/A5112523816",
+        "institution": ""
+      }
+    ],
+    "concepts": [],
+    "doi": "https://doi.org/10.5962/bhl.title.27468",
+    "pdf_url": null,
+    "landing_page_url": "",
+    "is_open_access": false,
+    "referenced_works": [],
+    "referenced_works_count": 0,
+    "related_works": [],
+    "type": "",
+    "venue": ""
+  }
+]

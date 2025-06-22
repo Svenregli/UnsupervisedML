@@ -1,0 +1,28 @@
+[
+  {
+    "experiment_name": "search_artificial_intelligence_200",
+    "path": "saved_results\\search_artificial_intelligence_200",
+    "status": "completed",
+    "completion_time": "2025-06-22T19:07:09.821241",
+    "n_papers": 200,
+    "methods": [
+      "kmeans",
+      "hierarchical",
+      "gmm",
+      "dbscan"
+    ]
+  },
+  {
+    "experiment_name": "quick_test",
+    "path": "saved_results\\quick_test",
+    "status": "completed",
+    "completion_time": "2025-06-22T18:05:18.298979",
+    "n_papers": 200,
+    "methods": [
+      "kmeans",
+      "hierarchical",
+      "gmm",
+      "dbscan"
+    ]
+  }
+]

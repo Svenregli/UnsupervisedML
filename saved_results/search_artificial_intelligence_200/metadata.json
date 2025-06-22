@@ -1,0 +1,60 @@
+{
+  "experiment_name": "search_artificial_intelligence_200",
+  "analysis_date": "2025-06-22T19:07:09.820240",
+  "n_papers": 200,
+  "available_methods": [
+    "kmeans",
+    "hierarchical",
+    "gmm",
+    "dbscan"
+  ],
+  "random_state": 42,
+  "has_dimensionality_results": true,
+  "has_outlier_detection": true,
+  "has_cluster_profiles": true,
+  "cluster_counts": {
+    "kmeans": {
+      "1": 62,
+      "9": 48,
+      "4": 33,
+      "0": 16,
+      "8": 16,
+      "6": 13,
+      "3": 4,
+      "2": 3,
+      "7": 2,
+      "10": 2,
+      "5": 1
+    },
+    "hierarchical": {
+      "1": 73,
+      "5": 35,
+      "3": 33,
+      "0": 18,
+      "2": 16,
+      "10": 14,
+      "4": 4,
+      "8": 2,
+      "6": 2,
+      "9": 2,
+      "7": 1
+    },
+    "gmm": {
+      "5": 63,
+      "1": 38,
+      "0": 35,
+      "8": 20,
+      "9": 16,
+      "10": 15,
+      "3": 4,
+      "7": 3,
+      "4": 3,
+      "6": 2,
+      "2": 1
+    },
+    "dbscan": {
+      "-1": 195,
+      "0": 5
+    }
+  }
+}
