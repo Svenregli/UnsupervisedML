@@ -934,44 +934,220 @@ def show_analysis_dashboard_fixed(dashboard):
     
     # Tab 4: Advanced Analytics
     with tab4:
-        show_advanced_analytics_fixed(dashboard)
+        show_advanced_analytics(dashboard)
     
     # Tab 5: Research Explorer
     with tab5:
         show_research_explorer_fixed(dashboard)
 
-def show_advanced_analytics_fixed(dashboard):
+def show_advanced_analytics(dashboard):
     """
-    Fixed advanced analytics that works with loaded experiments.
+    Display advanced analytics including TF-IDF analysis.
     """
-    st.header("📈 Advanced Analytics")
     
     analyzer = dashboard.analyzer
     df = analyzer.df
     
-    # Analysis overview
-    st.subheader("🔍 Analysis Summary")
+    st.header("📈 Advanced Analytics")
     
-    col1, col2 = st.columns(2)
+    # Add TF-IDF Analysis Section
+    st.subheader("📝 TF-IDF Text Analysis")
     
-    with col1:
-        st.markdown("**Available Analysis Components:**")
+    if hasattr(analyzer, 'text_features') and hasattr(analyzer, 'tfidf_vectorizer'):
+        # TF-IDF Matrix Overview
+        tfidf_matrix = analyzer.text_features
+        feature_names = analyzer.tfidf_vectorizer.get_feature_names_out()
         
-        components = []
-        if hasattr(analyzer, 'cluster_labels') and analyzer.cluster_labels:
-            components.append(f"✅ Clustering ({len(analyzer.cluster_labels)} methods)")
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("Documents", tfidf_matrix.shape[0])
+        with col2:
+            st.metric("Features", tfidf_matrix.shape[1])
+        with col3:
+            sparsity = (1 - tfidf_matrix.nnz / (tfidf_matrix.shape[0] * tfidf_matrix.shape[1])) * 100
+            st.metric("Sparsity", f"{sparsity:.1f}%")
+        with col4:
+            st.metric("Non-zero Elements", f"{tfidf_matrix.nnz:,}")
         
-        if hasattr(analyzer, 'dimensionality_results') and analyzer.dimensionality_results:
-            components.append(f"✅ Dimensionality Reduction ({len(analyzer.dimensionality_results)} methods)")
+        # TF-IDF Analysis Options
+        analysis_type = st.selectbox(
+            "Select TF-IDF Analysis:",
+            ["Top Terms by Frequency", "Term-Document Heatmap", "Cluster-Specific Terms", "Document Similarity Matrix"]
+        )
         
-        if hasattr(analyzer, 'outlier_labels') and analyzer.outlier_labels:
-            components.append(f"✅ Outlier Detection ({len(analyzer.outlier_labels)} methods)")
-        
-        if hasattr(analyzer, 'cluster_profiles') and analyzer.cluster_profiles:
-            components.append(f"✅ Cluster Profiles ({len(analyzer.cluster_profiles)} clusters)")
-        
-        for component in components:
-            st.markdown(f"- {component}")
+        if analysis_type == "Top Terms by Frequency":
+            # Show top terms across all documents
+            n_top_terms = st.slider("Number of top terms to display:", 10, 100, 20)
+            
+            # Calculate term frequencies
+            term_frequencies = np.array(tfidf_matrix.sum(axis=0)).flatten()
+            top_indices = np.argsort(term_frequencies)[-n_top_terms:][::-1]
+            
+            top_terms_data = []
+            for idx in top_indices:
+                top_terms_data.append({
+                    'Term': feature_names[idx],
+                    'Total TF-IDF Score': term_frequencies[idx],
+                    'Document Frequency': (tfidf_matrix[:, idx] > 0).sum()
+                })
+            
+            top_terms_df = pd.DataFrame(top_terms_data)
+            
+            # Visualization
+            fig = px.bar(
+                top_terms_df.head(20), 
+                x='Total TF-IDF Score', 
+                y='Term',
+                title=f"Top {min(20, n_top_terms)} Terms by TF-IDF Score",
+                orientation='h'
+            )
+            fig.update_layout(height=600, yaxis={'categoryorder': 'total ascending'})
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Display table
+            st.dataframe(top_terms_df, use_container_width=True)
+            
+        elif analysis_type == "Term-Document Heatmap":
+            # Show heatmap for top terms and sample documents
+            st.info("Showing TF-IDF scores for top terms across sample documents")
+            
+            n_terms = st.slider("Number of top terms:", 10, 50, 20)
+            n_docs = st.slider("Number of sample documents:", 10, 100, 20)
+            
+            # Get top terms
+            term_frequencies = np.array(tfidf_matrix.sum(axis=0)).flatten()
+            top_term_indices = np.argsort(term_frequencies)[-n_terms:][::-1]
+            
+            # Sample documents
+            sample_doc_indices = np.random.choice(tfidf_matrix.shape[0], min(n_docs, tfidf_matrix.shape[0]), replace=False)
+            
+            # Create heatmap data
+            heatmap_data = tfidf_matrix[sample_doc_indices][:, top_term_indices].toarray()
+            
+            # Create figure
+            fig = go.Figure(data=go.Heatmap(
+                z=heatmap_data,
+                x=[feature_names[i] for i in top_term_indices],
+                y=[f"Doc {i}" for i in sample_doc_indices],
+                colorscale='Viridis',
+                hovertemplate='Term: %{x}<br>Document: %{y}<br>TF-IDF: %{z:.3f}<extra></extra>'
+            ))
+            
+            fig.update_layout(
+                title=f"TF-IDF Heatmap: Top {n_terms} Terms vs {len(sample_doc_indices)} Sample Documents",
+                xaxis_title="Terms",
+                yaxis_title="Documents",
+                height=600
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+            
+        elif analysis_type == "Cluster-Specific Terms" and 'cluster_kmeans' in df.columns:
+            # Show top terms for each cluster
+            st.info("Analyzing characteristic terms for each research cluster")
+            
+            n_terms_per_cluster = st.slider("Terms per cluster:", 5, 20, 10)
+            
+            clusters = sorted(df['cluster_kmeans'].unique())
+            cluster_terms_data = []
+            
+            for cluster_id in clusters:
+                cluster_docs = df[df['cluster_kmeans'] == cluster_id].index
+                
+                if len(cluster_docs) > 0:
+                    # Calculate mean TF-IDF for this cluster
+                    cluster_tfidf = tfidf_matrix[cluster_docs].mean(axis=0).A1
+                    top_indices = np.argsort(cluster_tfidf)[-n_terms_per_cluster:][::-1]
+                    
+                    for idx in top_indices:
+                        cluster_terms_data.append({
+                            'Cluster': f'Cluster {cluster_id}',
+                            'Term': feature_names[idx],
+                            'Mean TF-IDF': cluster_tfidf[idx],
+                            'Cluster Size': len(cluster_docs)
+                        })
+            
+            cluster_terms_df = pd.DataFrame(cluster_terms_data)
+            
+            # Create subplot for each cluster
+            fig = px.bar(
+                cluster_terms_df, 
+                x='Mean TF-IDF', 
+                y='Term',
+                facet_col='Cluster',
+                facet_col_wrap=3,
+                title="Top Terms by Cluster",
+                orientation='h'
+            )
+            
+            fig.update_layout(height=800)
+            fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Show detailed table
+            st.subheader("Detailed Cluster Terms")
+            selected_cluster = st.selectbox("Select cluster for detailed view:", clusters)
+            cluster_data = cluster_terms_df[cluster_terms_df['Cluster'] == f'Cluster {selected_cluster}']
+            st.dataframe(cluster_data, use_container_width=True)
+            
+        elif analysis_type == "Document Similarity Matrix":
+            # Show document similarity based on TF-IDF
+            st.info("Computing cosine similarity between documents based on TF-IDF vectors")
+            
+            n_docs = st.slider("Number of documents for similarity analysis:", 10, 100, 20)
+            
+            # Sample documents for similarity analysis
+            sample_indices = np.random.choice(tfidf_matrix.shape[0], min(n_docs, tfidf_matrix.shape[0]), replace=False)
+            sample_matrix = tfidf_matrix[sample_indices]
+            
+            # Calculate cosine similarity
+            from sklearn.metrics.pairwise import cosine_similarity
+            similarity_matrix = cosine_similarity(sample_matrix)
+            
+            # Create heatmap
+            fig = go.Figure(data=go.Heatmap(
+                z=similarity_matrix,
+                x=[f"Doc {i}" for i in sample_indices],
+                y=[f"Doc {i}" for i in sample_indices],
+                colorscale='RdBu',
+                zmid=0,
+                hovertemplate='Doc %{x} vs Doc %{y}<br>Similarity: %{z:.3f}<extra></extra>'
+            ))
+            
+            fig.update_layout(
+                title=f"Document Similarity Matrix (Cosine Similarity)",
+                xaxis_title="Documents",
+                yaxis_title="Documents",
+                height=600
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Show most similar document pairs
+            st.subheader("Most Similar Document Pairs")
+            
+            # Get upper triangle of similarity matrix (excluding diagonal)
+            mask = np.triu(np.ones_like(similarity_matrix, dtype=bool), k=1)
+            similarities = []
+            
+            for i in range(len(sample_indices)):
+                for j in range(i+1, len(sample_indices)):
+                    similarities.append({
+                        'Doc 1': sample_indices[i],
+                        'Doc 2': sample_indices[j],
+                        'Similarity': similarity_matrix[i, j],
+                        'Title 1': df.iloc[sample_indices[i]]['title'][:50] + "...",
+                        'Title 2': df.iloc[sample_indices[j]]['title'][:50] + "..."
+                    })
+            
+            similarities_df = pd.DataFrame(similarities).sort_values('Similarity', ascending=False)
+            st.dataframe(similarities_df.head(10), use_container_width=True)
+    
+    else:
+        st.warning("TF-IDF analysis not available. Please ensure text features are computed during analysis.")
+    
+    # Existing temporal analysis code continues here...
+    st.subheader("⏰ Temporal Research Evolution")
     
     with col2:
         st.markdown("**Dataset Characteristics:**")
